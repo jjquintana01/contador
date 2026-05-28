@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contador</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f3ee;
+      --surface: #ffffff;
+      --border: #e0ddd6;
+      --text: #1a1916;
+      --muted: #888680;
+      --positive: #2d6a4f;
+      --negative: #a33232;
+      --neutral: #1a1916;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      min-width: 300px;
+    }
+
+    .label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .count {
+      font-family: 'DM Mono', monospace;
+      font-size: 88px;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--neutral);
+      min-width: 200px;
+      text-align: center;
+      transition: color 0.2s ease, transform 0.1s ease;
+    }
+
+    .count.bump { transform: scale(1.12); }
+    .count.positive { color: var(--positive); }
+    .count.negative { color: var(--negative); }
+
+    .btn-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 26px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, transform 0.1s, border-color 0.15s;
+      user-select: none;
+      line-height: 1;
+    }
+
+    .btn:hover { background: var(--bg); border-color: #c8c5be; }
+    .btn:active { transform: scale(0.91); }
+
+    .btn-reset {
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 8px;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .btn-reset:hover { color: var(--text); background: var(--bg); }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <span class="label">contador</span>
+    <span class="count" id="count">0</span>
+    <div class="btn-row">
+      <button class="btn" id="dec" aria-label="Disminuir">−</button>
+      <button class="btn" id="inc" aria-label="Aumentar">+</button>
+    </div>
+    <button class="btn-reset" id="reset">Reiniciar</button>
+  </div>
+
+  <script>
+    let n = 0;
+    const el = document.getElementById('count');
+
+    function bump() {
+      el.classList.remove('bump');
+      void el.offsetWidth;
+      el.classList.add('bump');
+      setTimeout(() => el.classList.remove('bump'), 120);
+    }
+
+    function update() {
+      el.textContent = n;
+      el.classList.remove('positive', 'negative');
+      if (n > 0) el.classList.add('positive');
+      else if (n < 0) el.classList.add('negative');
+      bump();
+    }
+
+    document.getElementById('inc').onclick = () => { n++; update(); };
+    document.getElementById('dec').onclick = () => { n--; update(); };
+    document.getElementById('reset').onclick = () => { n = 0; update(); };
+  </script>
+
+</body>
+</html>
