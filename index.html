@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>Contador</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <style>
@@ -118,7 +119,7 @@
   </div>
 
   <script>
-    let n = 0;
+    let n = parseInt(localStorage.getItem('contador') ?? '0');
     const el = document.getElementById('count');
 
     function bump() {
@@ -134,11 +135,18 @@
       if (n > 0) el.classList.add('positive');
       else if (n < 0) el.classList.add('negative');
       bump();
+      localStorage.setItem('contador', n);
     }
+
+    update();
 
     document.getElementById('inc').onclick = () => { n++; update(); };
     document.getElementById('dec').onclick = () => { n--; update(); };
     document.getElementById('reset').onclick = () => { n = 0; update(); };
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/contador/sw.js');
+    }
   </script>
 
 </body>
